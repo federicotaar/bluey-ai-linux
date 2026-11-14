@@ -4,6 +4,12 @@ Le tappe principali di Bluey / Googly Eyes in questo fork, dalle più recenti.
 
 ## 2026-11-14
 
+- `LineConnection` (Swift): applicato il limite di 4 MB per frame già
+  documentato nel protocollo - un peer che non manda mai il newline viene
+  scollegato invece di far crescere il buffer all'infinito.
+- `MacLink.stop()`: le richieste in attesa vengono chiuse con `nil` invece di
+  lasciare le callback appese per sempre.
+- `docs/PROTOCOL.md`: formato del pacchetto JSON documentato campo per campo.
 - `web.py`: il docstring del modulo torna ad essere un vero docstring (era dopo
   l'import `__future__`, quindi invisibile a `__doc__`).
 - Documentazione: modello di sicurezza e protocollo in `docs/`.
