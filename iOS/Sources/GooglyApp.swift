@@ -1,4 +1,8 @@
 import SwiftUI
+/// Entry point of the iPhone app. RootView shows Bluey's face with follow
+/// mode; pairing with the Mac (or desktop port) happens over Bonjour, and
+/// sessions run through LiveVoice. The UIKit guard keeps the file compiling
+/// in previews and non-iOS toolchains.
 #if canImport(UIKit)
 import UIKit
 #endif
