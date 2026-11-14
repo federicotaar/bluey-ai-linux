@@ -252,6 +252,9 @@ final class LiveVoice: NSObject, ObservableObject {
         case "error":
             let error = event["error"] as? [String: Any]
             if (error?["code"] as? String) == "input_audio_buffer_commit_empty" { awaitingQuestion = false }
+            // An error before any response starts (e.g. the ask was rejected) leaves no
+            // response.done to recover from: without this he'd be stuck "thinking" forever.
+            if !responseActive, state == .thinking { setState(holding ? .asking : .listening) }
             let message = (error?["message"] as? String) ?? "Something went wrong."
             NSLog("Googly realtime error: \(message)")
 
