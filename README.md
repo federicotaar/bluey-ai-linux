@@ -1,5 +1,7 @@
 # Googly Eyes
 
+[![Desktop checks and bundles](https://github.com/federicotaar/bluey-ai-linux/actions/workflows/desktop.yml/badge.svg)](https://github.com/federicotaar/bluey-ai-linux/actions/workflows/desktop.yml)
+
 ## Ubuntu and Windows desktop port
 
 This copy adds **Bluey Desktop** for Ubuntu and Windows. It works with the existing iPhone app; the iOS app, original Mac app and shared Swift files remain unchanged. No Mac is needed to run or build the new desktop companion.
