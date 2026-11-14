@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Bluey in the browser: talk to him from any phone or computer on the network.
 
 The desktop app is the full experience (he sees your screen, clicks things).
@@ -7,6 +5,9 @@ This is the travelling version: hold to talk, he listens and answers, nothing
 touches your computer. The Groq key stays on this server and is never sent to
 the browser, so the page can be opened on any device on your Wi-Fi.
 """
+
+from __future__ import annotations
+
 
 import base64
 import json
