@@ -1,3 +1,4 @@
+"""Settings round-trips: credentials and preferences serialize and parse back."""
 import json
 from dataclasses import asdict
 
