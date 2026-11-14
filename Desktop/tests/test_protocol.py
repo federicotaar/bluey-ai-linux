@@ -1,3 +1,4 @@
+"""Phone link protocol: framing, pairing, packet dispatch and disconnects."""
 import json
 import queue
 import socket
