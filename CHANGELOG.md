@@ -9,6 +9,9 @@ Le tappe principali di Bluey / Googly Eyes in questo fork, dalle più recenti.
   scollegato invece di far crescere il buffer all'infinito.
 - `MacLink.stop()`: le richieste in attesa vengono chiuse con `nil` invece di
   lasciare le callback appese per sempre.
+- `LiveVoice`: un errore Realtime prima dell'inizio di una risposta (per
+  esempio una domanda rifiutata) non lo lascia più bloccato nello stato
+  "thinking" all'infinito: torna ad ascoltare.
 - `docs/PROTOCOL.md`: formato del pacchetto JSON documentato campo per campo.
 - `web.py`: il docstring del modulo torna ad essere un vero docstring (era dopo
   l'import `__future__`, quindi invisibile a `__doc__`).
