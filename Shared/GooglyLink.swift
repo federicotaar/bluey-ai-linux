@@ -127,6 +127,12 @@ public final class LineConnection {
                         self.onPacket?(packet)
                     }
                 }
+                // protocol.py caps a frame at 4 MB; a peer that never terminates
+                // a line would grow this buffer forever, so drop it instead
+                if self.buffer.count > 4 * 1024 * 1024 {
+                    self.connection.cancel()
+                    return
+                }
             }
             if isComplete || error != nil {
                 self.connection.cancel()
