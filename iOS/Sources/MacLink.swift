@@ -51,6 +51,10 @@ final class MacLink: ObservableObject {
         link?.cancel()
         link = nil
         connected = false
+        // fail pending requests instead of leaving their callbacks hanging
+        let waiting = self.waiting
+        self.waiting = [:]
+        waiting.values.forEach { $0(nil) }
     }
 
     private func restart() {
