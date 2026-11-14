@@ -1,3 +1,4 @@
+"""Realtime API client: request shapes and failure paths with mocked HTTP."""
 import io
 import json
 import unittest
