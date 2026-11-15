@@ -18,7 +18,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from . import groq
-from .settings import Credentials
+from .settings import Credentials, provider_for_key
 
 
 def lan_address() -> str:
@@ -44,12 +44,6 @@ SYSTEM_PROMPT = (
     "sentences unless asked for more. You cannot see the screen or control the "
     "computer in this version, so never claim that you did."
 )
-
-
-def groq_provider(key: str) -> str:
-    """Tell a Groq key (gsk_...) from an OpenAI one, so the right
-    backend handles it."""
-    return "groq" if key.strip().startswith("gsk_") else "openai"
 
 
 class WebHandler(BaseHTTPRequestHandler):
@@ -85,7 +79,7 @@ class WebHandler(BaseHTTPRequestHandler):
             self._send(200, page, "text/html; charset=utf-8")
         elif self.path == "/api/status":
             key = self.credentials.get()
-            self._json(200, {"ready": bool(key), "provider": groq_provider(key),
+            self._json(200, {"ready": bool(key), "provider": provider_for_key(key),
                              "model": groq.CHAT_MODEL, "stt": groq.STT_MODEL})
         else:
             self._error(404, "Not found.")
