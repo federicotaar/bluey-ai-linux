@@ -59,6 +59,7 @@ def provider_for_key(key: str) -> str:
 
 
 def config_file() -> Path:
+    """Where the desktop settings live on this platform."""
     return user_config_path("BlueyDesktop", appauthor=False) / "settings.json"
 
 
