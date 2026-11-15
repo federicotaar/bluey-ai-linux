@@ -43,3 +43,13 @@ def test_session_key_can_be_removed():
     credentials.set('sk-test-only')
     credentials.clear()
     assert not credentials.get()
+
+
+def test_provider_for_key_detects_groq_keys():
+    # Only the gsk_ prefix (ignoring surrounding whitespace) means Groq;
+    # anything else, including an empty key, is treated as OpenAI.
+    from bluey.settings import provider_for_key
+    assert provider_for_key("gsk_abc123") == "groq"
+    assert provider_for_key("  gsk_abc123\n") == "groq"
+    assert provider_for_key("sk-abc123") == "openai"
+    assert provider_for_key("") == "openai"
