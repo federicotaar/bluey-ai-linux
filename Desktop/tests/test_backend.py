@@ -459,6 +459,15 @@ class ShortcutAndURLTests(unittest.TestCase):
         self.assertEqual(validate_url("https://example.org/?q=hello%20world"), "https://example.org/?q=hello%20world")
         self.assertEqual(validate_url("localhost:8080/test"), "https://localhost:8080/test")
 
+    def test_url_port_zero_dash_hosts_and_spaces_are_rejected(self):
+        for url in ["https://example.org:0/", "https://-badhost/", "https://exa mple.org/"]:
+            with self.subTest(url=url), self.assertRaises(BackendError):
+                validate_url(url)
+
+    def test_url_scheme_case_and_trailing_dot_host_pass(self):
+        self.assertEqual(validate_url("HTTP://EXAMPLE.ORG"), "HTTP://EXAMPLE.ORG")
+        self.assertEqual(validate_url("https://example.org./"), "https://example.org./")
+
     def test_url_protocols_credentials_and_injection_are_rejected(self):
         for url in ["javascript:alert(1)", "file:///etc/passwd", "ms-settings:privacy", "ftp://example.org", "--help",
                     "https://example.org/\" & calc.exe", "https://example.org/`touch`", "https://example.org/\ncalc",
