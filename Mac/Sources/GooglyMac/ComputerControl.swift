@@ -1,3 +1,7 @@
+// Low-level hands on the keyboard and mouse, used only when the user asks
+// him to do something. Positions are in points, top-left origin of the main
+// display. Everything here needs the Accessibility permission first.
+
 import AppKit
 import ApplicationServices
 import Carbon.HIToolbox
