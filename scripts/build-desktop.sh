@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Build the standalone Bluey desktop app with PyInstaller (creates the venv first if needed).
 set -euo pipefail
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 PYTHON=${BLUEY_PYTHON:-python3}
