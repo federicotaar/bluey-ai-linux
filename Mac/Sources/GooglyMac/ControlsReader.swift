@@ -1,3 +1,7 @@
+// Reads the clickable controls (buttons, fields, links, checkboxes) of the
+// frontmost app through the Accessibility APIs, so he can click things that
+// have no visible text, like icon buttons. Works within a small time budget.
+
 import AppKit
 import ApplicationServices
 
