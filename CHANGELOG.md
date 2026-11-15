@@ -4,6 +4,8 @@ Le tappe principali di Bluey / Googly Eyes in questo fork, dalle più recenti.
 
 ## 2026-11-14
 
+- Tests: the URL guard now also pins port 0, hosts starting with a dash and hosts with spaces as rejected, and uppercase schemes plus trailing-dot hosts as accepted.
+
 - `LineConnection` (Swift): applicato il limite di 4 MB per frame già
   documentato nel protocollo - un peer che non manda mai il newline viene
   scollegato invece di far crescere il buffer all'infinito.
