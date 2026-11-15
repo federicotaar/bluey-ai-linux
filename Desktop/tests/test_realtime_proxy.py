@@ -55,6 +55,18 @@ class PiecesTests(unittest.TestCase):
 
 
 class SessionTests(unittest.IsolatedAsyncioTestCase):
+    async def test_history_is_trimmed_to_the_newest_turns(self):
+        s = session()
+        s.messages = [{"turn": i} for i in range(realtime_proxy.MAX_HISTORY + 10)]
+        s._trim()
+        self.assertEqual(len(s.messages), realtime_proxy.MAX_HISTORY)
+        self.assertEqual(s.messages[0]["turn"], 10)  # the oldest turns are dropped
+        self.assertEqual(s.messages[-1]["turn"], realtime_proxy.MAX_HISTORY + 9)
+        # trimming a short history is a no-op
+        s.messages = [{"turn": 0}]
+        s._trim()
+        self.assertEqual(s.messages, [{"turn": 0}])
+
     async def test_commit_transcribes_and_the_words_join_the_history(self):
         socket = FakeSocket([json.dumps({"type": "input_audio_buffer.commit"})])
         with patch("bluey.groq.transcribe", return_value="what is this"):
