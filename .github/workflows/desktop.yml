@@ -1,3 +1,7 @@
+# Desktop checks and bundles: runs the Python test suite and packages the
+# # desktop app whenever Desktop code, shared fonts or the desktop scripts change
+# # (push and pull request), plus manual dispatch.
+
 name: Desktop checks and bundles
 
 on:
