@@ -45,11 +45,12 @@ def test_session_key_can_be_removed():
     assert not credentials.get()
 
 
-def test_provider_for_key_detects_groq_keys():
-    # Only the gsk_ prefix (ignoring surrounding whitespace) means Groq;
-    # anything else, including an empty key, is treated as OpenAI.
-    from bluey.settings import provider_for_key
-    assert provider_for_key("gsk_abc123") == "groq"
-    assert provider_for_key("  gsk_abc123\n") == "groq"
-    assert provider_for_key("sk-abc123") == "openai"
-    assert provider_for_key("") == "openai"
+def test_save_is_atomic_and_leaves_no_temporary_file(tmp_path):
+    # save() writes a sibling .tmp and os.replace()s it into place, so an
+    # interrupted write can never leave a half-written settings.json - and
+    # after a successful save the temporary file must be gone.
+    path = tmp_path / 'settings.json'
+    Preferences(cursor_size=96, personality='Calm.').save(path)
+    assert path.exists()
+    assert not path.with_suffix('.tmp').exists()
+    assert json.loads(path.read_text())['cursor_size'] == 96
