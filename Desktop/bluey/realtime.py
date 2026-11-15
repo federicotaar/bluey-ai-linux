@@ -195,6 +195,8 @@ def _post(path: str, api_key: str, payload: dict, timeout: int) -> dict:
 
 
 def mint_token(api_key: str, personality: str, computer_control: bool, platform: str) -> str:
+    """Mint a short-lived (600 s) client secret for a Realtime voice session.
+    Raises APIError when OpenAI answers without a usable token."""
     response = _post("realtime/client_secrets", api_key,
                      {"expires_after": {"anchor": "created_at", "seconds": 600},
                       "session": build_session(personality, computer_control, platform)}, timeout=30)
@@ -217,6 +219,8 @@ def _clean_url(value: str) -> str | None:
 
 
 def research(api_key: str, question: str, context: str | None = None) -> dict:
+    """Run a research question through the API and return the parsed report.
+    Screen text is passed as clearly-marked untrusted context, never as instructions."""
     question = question.strip()
     if not question:
         raise APIError("Enter a question to research.")
