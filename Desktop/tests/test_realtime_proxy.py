@@ -45,6 +45,15 @@ def session(**kwargs):
     return PhoneSession(api_key="gsk_test", tools=[], instructions="Be brief.", **kwargs)
 
 
+class PiecesTests(unittest.TestCase):
+    def test_replies_split_into_three_word_bubbles(self):
+        pieces = realtime_proxy._pieces("one two three four five six seven")
+        self.assertEqual(pieces, ["one two three ", "four five six ", "seven "])
+
+    def test_a_short_reply_is_one_bubble(self):
+        self.assertEqual(realtime_proxy._pieces("hello there"), ["hello there "])
+
+
 class SessionTests(unittest.IsolatedAsyncioTestCase):
     async def test_commit_transcribes_and_the_words_join_the_history(self):
         socket = FakeSocket([json.dumps({"type": "input_audio_buffer.commit"})])
