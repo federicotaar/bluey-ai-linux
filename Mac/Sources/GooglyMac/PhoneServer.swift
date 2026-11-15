@@ -1,3 +1,6 @@
+// The Mac side of the phone link: advertises the Mac over Bonjour and
+// streams face updates to every connected phone.
+
 import Foundation
 import Network
 import GooglyShared
