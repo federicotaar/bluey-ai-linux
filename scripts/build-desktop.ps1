@@ -1,3 +1,4 @@
+# Build the standalone Bluey desktop app with PyInstaller on Windows (creates the venv first if needed).
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $PSScriptRoot
 $Venv = Join-Path $Root '.venv'
