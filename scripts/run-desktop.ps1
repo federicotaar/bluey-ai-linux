@@ -1,3 +1,4 @@
+# Run Bluey from source on Windows: creates .venv, installs the Desktop package and starts the app.
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $PSScriptRoot
 $Venv = Join-Path $Root '.venv'
