@@ -1,3 +1,7 @@
+// The Mac app's menu-bar presence. Wires up the overlay, the global hotkeys
+// (Option-Space wakes him, Ctrl-Option-P/F/D/H/T drive pointing, hiding and
+// the talk test) and the phone link into the app lifecycle.
+
 import AppKit
 import Carbon.HIToolbox
 import GooglyShared
