@@ -10,6 +10,10 @@ from types import SimpleNamespace
 os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
 
 import pytest
+
+# The UI tests need Qt; the rest of the suite runs without it, so a missing
+# PySide6 skips this module instead of failing collection for everyone.
+pytest.importorskip('PySide6', reason='UI tests need the Qt bindings')
 from PySide6.QtWidgets import QApplication, QMessageBox
 
 from bluey.app import DesktopApp
