@@ -1,3 +1,7 @@
+// The floating character on screen and everything around him: the borderless
+// overlay window, his face and pointer animations, speech bubbles, and the
+// follow / point / hidden modes.
+
 import AppKit
 import QuartzCore
 import GooglyShared
