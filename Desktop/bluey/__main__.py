@@ -24,6 +24,8 @@ def choose_qt_platform() -> None:
 
 
 def main() -> int:
+    """Parse the command line and run the desktop app. --smoke-test renders the UI
+    without networking, credentials or computer control, then exits."""
     parser = argparse.ArgumentParser(description="Bluey desktop companion for Ubuntu and Windows")
     parser.add_argument("--port", type=int, default=8765, help="LAN TCP port (default: 8765)")
     parser.add_argument("--smoke-test", action="store_true", help="Open and render UI without networking, credentials or computer control, then exit")
