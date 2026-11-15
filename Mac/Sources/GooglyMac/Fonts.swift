@@ -1,3 +1,7 @@
+// Registers the bundled fonts at launch and hands out the app's display
+// face, falling back to the system rounded font when a bundled one is
+// missing.
+
 import AppKit
 import CoreText
 
