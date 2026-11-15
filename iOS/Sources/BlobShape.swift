@@ -1,3 +1,7 @@
+// The phone side of his look: the app colors, the Fredoka / IBM Plex font
+// helpers with rounded system fallbacks, and the blob shape his face is drawn
+// with.
+
 import SwiftUI
 
 extension Color {
