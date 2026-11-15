@@ -47,6 +47,8 @@ SYSTEM_PROMPT = (
 
 
 def groq_provider(key: str) -> str:
+    """Tell a Groq key (gsk_...) from an OpenAI one, so the right
+    backend handles it."""
     return "groq" if key.strip().startswith("gsk_") else "openai"
 
 
@@ -156,6 +158,8 @@ class WebHandler(BaseHTTPRequestHandler):
 
 
 def main() -> int:
+    """Start the LAN web server: any browser on this Wi-Fi can talk to
+    Bluey. Warns first when no Groq key has been saved yet."""
     handler = type("BoundWebHandler", (WebHandler,), {"credentials": Credentials()})
     if not handler.credentials.get():
         print("No saved Groq key yet. Add one in the Bluey desktop app, then run this again.")
