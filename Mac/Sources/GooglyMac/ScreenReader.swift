@@ -1,3 +1,7 @@
+// Lets him see the screen: captures windows with ScreenCaptureKit, finds
+// text and clickable targets with Vision, and answers which target sits at or
+// near a point.
+
 import AppKit
 import ScreenCaptureKit
 import Vision
