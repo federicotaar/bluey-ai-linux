@@ -1,3 +1,7 @@
+// The Mac side of a live session. Tracks whether he is awake, runs his tools
+// one at a time in the order he asked, and enforces the short refusal window
+// after the stop hotkey.
+
 import AppKit
 import GooglyShared
 
