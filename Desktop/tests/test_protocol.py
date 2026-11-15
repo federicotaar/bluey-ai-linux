@@ -205,3 +205,32 @@ class PhoneServerTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class EncodeTests(unittest.TestCase):
+    """_encode guards: malformed payloads fail before they reach a socket."""
+
+    def test_a_non_dict_packet_is_rejected(self):
+        for bad in ("text", 42, ["a", "list"], None):
+            with self.assertRaises(ValueError):
+                protocol.PhoneServer._encode(bad)
+
+    def test_nan_and_infinity_are_rejected(self):
+        # JSON has no NaN/Infinity; a face packet with one would be invalid
+        # for the phone, so encoding refuses instead of emitting garbage.
+        with self.assertRaises(ValueError):
+            protocol.PhoneServer._encode({"face": {"gazeX": float("nan")}})
+        with self.assertRaises(ValueError):
+            protocol.PhoneServer._encode({"face": {"gazeX": float("inf")}})
+
+    def test_oversized_packets_are_rejected(self):
+        big = {"data": "x" * (protocol.MAX_FRAME_BYTES + 1)}
+        with self.assertRaises(ValueError):
+            protocol.PhoneServer._encode(big)
+
+    def test_a_valid_packet_round_trips_as_one_line(self):
+        encoded = protocol.PhoneServer._encode({"face": {"gazeX": 0.5, "name": "caffè"}})
+        self.assertTrue(encoded.endswith(b"\n"))
+        self.assertNotIn(b"\n", encoded[:-1])
+        self.assertEqual(json.loads(encoded.decode("utf-8")),
+                         {"face": {"gazeX": 0.5, "name": "caffè"}})
