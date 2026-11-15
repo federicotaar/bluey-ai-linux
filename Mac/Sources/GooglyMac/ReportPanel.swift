@@ -1,3 +1,7 @@
+// The research report card on the Mac: appears while he researches, previews
+// the first lines of the answer, expands on click and stays on screen until
+// dismissed.
+
 import AppKit
 import GooglyShared
 import SwiftUI
