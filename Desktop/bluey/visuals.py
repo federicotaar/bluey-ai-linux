@@ -60,6 +60,8 @@ BERRY = "#A9BCFF"
 
 
 def register_fonts() -> None:
+    """Load every bundled .ttf (Shared/Fonts or fonts/) and set IBM Plex Sans
+    as the app font. Works both from sources and from a PyInstaller bundle."""
     root = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[2]))
     for folder in (root / "Shared" / "Fonts", root / "fonts"):
         if folder.exists():
@@ -69,6 +71,9 @@ def register_fonts() -> None:
 
 
 def draw_berry(p: QPainter, rect: QRectF, gaze: QPointF = QPointF(), happy: bool = False) -> None:
+    """Paint Bluey's berry body into rect, following the gaze point and
+    switching to the happy face when asked. Coordinates are scaled from a
+    200x200 design space."""
     p.save()
     p.translate(rect.x(), rect.y())
     p.scale(rect.width() / 200, rect.height() / 200)
@@ -103,6 +108,7 @@ def draw_berry(p: QPainter, rect: QRectF, gaze: QPointF = QPointF(), happy: bool
 
 
 def berry_icon() -> QIcon:
+    """Render the berry once into a 128x128 QIcon (window and tray icon)."""
     pix = QPixmap(128, 128)
     pix.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pix)
