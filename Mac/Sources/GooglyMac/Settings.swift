@@ -1,3 +1,6 @@
+// The Mac app's persisted settings, shared process-wide through
+// Settings.shared.
+
 import Foundation
 import GooglyShared
 
