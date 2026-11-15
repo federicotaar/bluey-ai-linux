@@ -52,6 +52,7 @@ QToolTip { background: #302B43; color: white; border: 1px solid #A9BCFF; }
 
 
 def label(text, name=None, wrap=False):
+    """Make a QLabel, optionally with an object name for styling and word wrap."""
     item = QLabel(text)
     if name:
         item.setObjectName(name)
@@ -60,6 +61,8 @@ def label(text, name=None, wrap=False):
 
 
 def button(text, callback, name=None):
+    """Make a QPushButton wired to callback, optionally with an object name
+    for styling."""
     item = QPushButton(text)
     if name:
         item.setObjectName(name)
