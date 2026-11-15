@@ -134,6 +134,13 @@ class BackendTests(unittest.TestCase):
     def perform(self, name, args):
         return self.backend.perform(name, args, self.cancel)
 
+    def test_number_accepts_only_real_finite_numbers_in_range(self):
+        self.assertEqual(backend._number(5, "speed", 1, 10), 5.0)
+        self.assertEqual(backend._number(2.5, "speed", 1, 10), 2.5)
+        for bad in (True, "5", None, float("nan"), float("inf"), 0, 11):
+            with self.assertRaises(BackendError, msg=repr(bad)):
+                backend._number(bad, "speed", 1, 10)
+
     def test_grid_edges_respect_negative_monitor_origin(self):
         self.assertEqual(self.backend.resolve({"x": 0, "y": 0}), (-1920, 120))
         self.assertEqual(self.backend.resolve({"x": 1000, "y": 1000}), (-1, 1199))
