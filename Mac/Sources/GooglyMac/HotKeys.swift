@@ -1,3 +1,6 @@
+// System-wide keyboard shortcuts through Carbon, which works without an
+// Accessibility prompt. Each shortcut is a modifier set plus a kVK key code.
+
 import AppKit
 import Carbon.HIToolbox
 
