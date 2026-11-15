@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Run Bluey from source: creates .venv, installs the Desktop package and starts the app.
 set -euo pipefail
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 PYTHON=${BLUEY_PYTHON:-python3}
