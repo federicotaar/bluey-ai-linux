@@ -118,6 +118,21 @@ class GroqTests(unittest.TestCase):
         self.assertNotIn("web_research", names)
         self.assertNotIn("click", names)  # computer control stays off
 
+    def test_error_messages_name_the_known_failures(self):
+        self.assertIn("API key", groq._error_message(401))
+        self.assertIn("rate limit", groq._error_message(429))
+        self.assertIn("too long", groq._error_message(413))
+        # unknown codes still say what happened, with the number visible
+        self.assertIn("418", groq._error_message(418))
+
+    def test_silence_detection_handles_short_and_odd_audio(self):
+        self.assertTrue(groq.is_silent(b""))
+        self.assertTrue(groq.is_silent(b"\x00"))  # a lone byte cannot be a sample
+        # odd byte counts are handled (the dangling byte is ignored, no crash)
+        self.assertFalse(groq.is_silent(LOUD[:-1]))
+        # a higher threshold treats even loud audio as silent
+        self.assertTrue(groq.is_silent(LOUD, threshold=9000))
+
     def test_groq_session_offers_computer_control_when_it_is_on(self):
         _, tools = realtime.groq_session("", True)
         names = {tool["function"]["name"] for tool in tools}
