@@ -84,3 +84,6 @@ def test_personality_is_bounded_on_load(tmp_path):
     path=tmp_path/'settings.json'
     path.write_text(json.dumps({'personality':'x'*9000}))
     assert len(Preferences.load(path).personality)==8000
+
+def test_missing_preferences_keep_defaults(tmp_path):
+    assert Preferences.load(tmp_path/'missing.json')==Preferences()
