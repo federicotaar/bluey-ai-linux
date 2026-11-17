@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import math
 from pathlib import Path
 from dataclasses import dataclass, asdict
 
@@ -31,7 +32,7 @@ class Preferences:
                 return result
             for key, default in asdict(result).items():
                 value = raw.get(key, default)
-                if type(value) is type(default):
+                if type(value) is type(default) and (not isinstance(value,float) or math.isfinite(value)):
                     setattr(result, key, value)
             result.cursor_size = max(48, min(120, result.cursor_size))
             result.phone_position = max(0.0, min(1.0, result.phone_position))
