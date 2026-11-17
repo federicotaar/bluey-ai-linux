@@ -60,3 +60,9 @@ def test_non_finite_phone_position_falls_back(tmp_path):
         path=tmp_path/'settings.json'
         path.write_text('{"phone_position":'+value+'}')
         assert Preferences.load(path).phone_position==0.5
+
+def test_integer_phone_position_is_supported(tmp_path):
+    path=tmp_path/'settings.json'
+    for value in (0,1):
+        path.write_text(json.dumps({'phone_position':value}))
+        assert Preferences.load(path).phone_position==float(value)
