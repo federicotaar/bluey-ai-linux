@@ -105,3 +105,9 @@ def test_provider_detection_trims_surrounding_whitespace():
     from bluey.settings import provider_for_key
     assert provider_for_key('  gsk_fixture  ')=='groq'
     assert provider_for_key('sk_fixture')=='openai' 
+
+def test_cursor_size_clamps_both_ends(tmp_path):
+    path=tmp_path/'settings.json'
+    for value,expected in ((-99,48),(99999,120)):
+        path.write_text(json.dumps({'cursor_size':value}))
+        assert Preferences.load(path).cursor_size==expected
