@@ -92,3 +92,11 @@ def test_save_creates_nested_config_directory(tmp_path):
     path=tmp_path/'nested'/'profile'/'settings.json'
     Preferences(glow=True).save(path)
     assert Preferences.load(path).glow is True
+
+def test_credentials_reject_whitespace_and_oversized_values():
+    import pytest
+    credentials=Credentials(use_keyring=False)
+    for value in ('','  ','has space','has\nnewline','x'*1025):
+        with pytest.raises(ValueError):
+            credentials.set(value)
+        assert credentials.get()=='' 
