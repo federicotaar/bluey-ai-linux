@@ -100,3 +100,8 @@ def test_credentials_reject_whitespace_and_oversized_values():
         with pytest.raises(ValueError):
             credentials.set(value)
         assert credentials.get()=='' 
+
+def test_provider_detection_trims_surrounding_whitespace():
+    from bluey.settings import provider_for_key
+    assert provider_for_key('  gsk_fixture  ')=='groq'
+    assert provider_for_key('sk_fixture')=='openai' 
