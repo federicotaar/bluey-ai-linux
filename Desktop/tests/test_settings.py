@@ -79,3 +79,8 @@ def test_preferences_ignore_non_object_json(tmp_path):
     for value in ('null','[]','42','"text"'):
         path.write_text(value)
         assert Preferences.load(path)==Preferences()
+
+def test_personality_is_bounded_on_load(tmp_path):
+    path=tmp_path/'settings.json'
+    path.write_text(json.dumps({'personality':'x'*9000}))
+    assert len(Preferences.load(path).personality)==8000
