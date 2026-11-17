@@ -54,3 +54,9 @@ def test_save_is_atomic_and_leaves_no_temporary_file(tmp_path):
     assert path.exists()
     assert not path.with_suffix('.tmp').exists()
     assert json.loads(path.read_text())['cursor_size'] == 96
+
+def test_non_finite_phone_position_falls_back(tmp_path):
+    for value in ('NaN','Infinity','-Infinity'):
+        path=tmp_path/'settings.json'
+        path.write_text('{"phone_position":'+value+'}')
+        assert Preferences.load(path).phone_position==0.5
