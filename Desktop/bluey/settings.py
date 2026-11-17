@@ -32,7 +32,9 @@ class Preferences:
                 return result
             for key, default in asdict(result).items():
                 value = raw.get(key, default)
-                if type(value) is type(default) and (not isinstance(value,float) or math.isfinite(value)):
+                if key=="phone_position" and type(value) in (int,float) and math.isfinite(value):
+                    result.phone_position=float(value)
+                elif type(value) is type(default) and (not isinstance(value,float) or math.isfinite(value)):
                     setattr(result, key, value)
             result.cursor_size = max(48, min(120, result.cursor_size))
             result.phone_position = max(0.0, min(1.0, result.phone_position))
