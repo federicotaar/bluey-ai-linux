@@ -73,3 +73,9 @@ def test_boolean_is_not_a_phone_position(tmp_path):
     result=Preferences.load(path)
     assert result.phone_position==0.5
     assert result.cursor_size==72
+
+def test_preferences_ignore_non_object_json(tmp_path):
+    path=tmp_path/'settings.json'
+    for value in ('null','[]','42','"text"'):
+        path.write_text(value)
+        assert Preferences.load(path)==Preferences()
