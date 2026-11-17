@@ -87,3 +87,8 @@ def test_personality_is_bounded_on_load(tmp_path):
 
 def test_missing_preferences_keep_defaults(tmp_path):
     assert Preferences.load(tmp_path/'missing.json')==Preferences()
+
+def test_save_creates_nested_config_directory(tmp_path):
+    path=tmp_path/'nested'/'profile'/'settings.json'
+    Preferences(glow=True).save(path)
+    assert Preferences.load(path).glow is True
