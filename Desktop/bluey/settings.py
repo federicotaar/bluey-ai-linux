@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import math
+import tempfile
 from pathlib import Path
 from dataclasses import dataclass, asdict
 
@@ -48,9 +49,20 @@ class Preferences:
     def save(self, path: Path | None = None) -> None:
         path = path or config_file()
         path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = path.with_suffix(".tmp")
-        temporary.write_text(json.dumps(asdict(self), indent=2), encoding="utf-8")
-        os.replace(temporary, path)
+        # A unique sibling keeps concurrent saves from sharing a temporary file.
+        # Flush before replace; on failure the previous settings remain intact.
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
+                                             prefix=path.name + ".", suffix=".tmp", delete=False) as stream:
+                temporary = Path(stream.name)
+                json.dump(asdict(self), stream, indent=2, allow_nan=False)
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(temporary, path)
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
 
 
 MOODS = ("listening", "resting", "thinking", "talking", "pointing", "happy", "sleepy")
