@@ -111,3 +111,36 @@ def test_cursor_size_clamps_both_ends(tmp_path):
     for value,expected in ((-99,48),(99999,120)):
         path.write_text(json.dumps({'cursor_size':value}))
         assert Preferences.load(path).cursor_size==expected
+
+def test_failed_replace_preserves_old_preferences_and_cleans_temporary(tmp_path, monkeypatch):
+    import pytest
+    import bluey.settings as settings
+    path = tmp_path / "settings.json"
+    Preferences(personality="original").save(path)
+    def fail(*args):
+        raise OSError("simulated disk failure")
+    monkeypatch.setattr(settings.os, "replace", fail)
+    with pytest.raises(OSError):
+        Preferences(personality="new").save(path)
+    assert Preferences.load(path).personality == "original"
+    assert list(tmp_path.iterdir()) == [path]
+
+
+def test_concurrent_preference_saves_are_complete_and_leave_no_debris(tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    path = tmp_path / "settings.json"
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        list(pool.map(lambda i: Preferences(personality=f"writer-{i}").save(path), range(40)))
+    assert Preferences.load(path).personality.startswith("writer-")
+    assert set(json.loads(path.read_text())) == set(asdict(Preferences()))
+    assert list(tmp_path.iterdir()) == [path]
+
+
+def test_invalid_float_save_leaves_existing_settings_intact(tmp_path):
+    import pytest
+    path = tmp_path / "settings.json"
+    Preferences().save(path)
+    with pytest.raises(ValueError):
+        Preferences(phone_position=float("nan")).save(path)
+    assert Preferences.load(path) == Preferences()
+    assert list(tmp_path.iterdir()) == [path]
