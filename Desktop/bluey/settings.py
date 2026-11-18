@@ -105,7 +105,7 @@ class Credentials:
 
     def set(self, key: str) -> bool:
         key = key.strip()
-        if not key or len(key) > 1024 or any(c.isspace() for c in key):
+        if not key or len(key) > 1024 or any(c.isspace() or ord(c)<33 or ord(c)>126 for c in key):
             raise ValueError("Paste a complete API key without spaces.")
         self._key = key
         self.persisted = False
