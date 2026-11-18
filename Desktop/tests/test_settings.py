@@ -144,3 +144,13 @@ def test_invalid_float_save_leaves_existing_settings_intact(tmp_path):
         Preferences(phone_position=float("nan")).save(path)
     assert Preferences.load(path) == Preferences()
     assert list(tmp_path.iterdir()) == [path]
+
+
+def test_credentials_reject_header_unsafe_bytes_without_replacing_session():
+    import pytest
+    credentials = Credentials(use_keyring=False)
+    credentials.set("sk-existing")
+    for value in ("sk-null\x00byte", "sk-del\x7f", "sk-é", "sk-zero\u200bwidth"):
+        with pytest.raises(ValueError):
+            credentials.set(value)
+        assert credentials.get() == "sk-existing"
