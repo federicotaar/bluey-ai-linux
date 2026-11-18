@@ -5,10 +5,16 @@ import json
 import os
 import math
 import tempfile
+import threading
 from pathlib import Path
 from dataclasses import dataclass, asdict
 
 from platformdirs import user_config_path, user_log_path
+
+
+# Windows does not permit overlapping replacements of an open destination.
+# Serialize in-process saves while unique temporary files protect each writer.
+_SAVE_LOCK = threading.Lock()
 
 
 @dataclass
@@ -47,22 +53,23 @@ class Preferences:
         return result
 
     def save(self, path: Path | None = None) -> None:
-        path = path or config_file()
-        path.parent.mkdir(parents=True, exist_ok=True)
-        # A unique sibling keeps concurrent saves from sharing a temporary file.
-        # Flush before replace; on failure the previous settings remain intact.
-        temporary = None
-        try:
-            with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
-                                             prefix=path.name + ".", suffix=".tmp", delete=False) as stream:
-                temporary = Path(stream.name)
-                json.dump(asdict(self), stream, indent=2, allow_nan=False)
-                stream.flush()
-                os.fsync(stream.fileno())
-            os.replace(temporary, path)
-        finally:
-            if temporary is not None:
-                temporary.unlink(missing_ok=True)
+        with _SAVE_LOCK:
+            path = path or config_file()
+            path.parent.mkdir(parents=True, exist_ok=True)
+            # A unique sibling keeps concurrent saves from sharing a temporary file.
+            # Flush before replace; on failure the previous settings remain intact.
+            temporary = None
+            try:
+                with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
+                                                 prefix=path.name + ".", suffix=".tmp", delete=False) as stream:
+                    temporary = Path(stream.name)
+                    json.dump(asdict(self), stream, indent=2, allow_nan=False)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                os.replace(temporary, path)
+            finally:
+                if temporary is not None:
+                    temporary.unlink(missing_ok=True)
 
 
 MOODS = ("listening", "resting", "thinking", "talking", "pointing", "happy", "sleepy")
