@@ -52,6 +52,21 @@ class Preferences:
             pass
         return result
 
+    def with_updates(self, **changes) -> "Preferences":
+        """A copy with some fields changed. Unknown names raise TypeError and
+        out-of-range values are clamped the same way load() does."""
+        known = asdict(self)
+        for name in changes:
+            if name not in known:
+                raise TypeError(f"unknown preference: {name}")
+        updated = Preferences(**{**known, **changes})
+        updated.cursor_size = clamp_cursor_size(updated.cursor_size)
+        updated.phone_position = clamp_phone_position(updated.phone_position)
+        if updated.mood not in MOODS:
+            updated.mood = "listening"
+        updated.personality = updated.personality[:8000]
+        return updated
+
     def save(self, path: Path | None = None) -> None:
         with _SAVE_LOCK:
             path = path or config_file()
