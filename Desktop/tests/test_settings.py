@@ -174,3 +174,9 @@ def test_with_updates_returns_a_clamped_copy():
     assert original == Preferences()
     with pytest.raises(TypeError):
         original.with_updates(volume=3)
+
+
+def test_diff_lists_only_changed_fields():
+    base = Preferences()
+    assert base.diff(Preferences()) == {}
+    assert base.diff(base.with_updates(glow=True, mood='happy')) == {'glow': True, 'mood': 'happy'}
