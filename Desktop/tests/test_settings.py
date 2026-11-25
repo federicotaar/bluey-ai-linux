@@ -164,3 +164,13 @@ def test_clamp_helpers_hold_both_limits():
     assert clamp_phone_position(-1) == 0.0
     assert clamp_phone_position(3) == 1.0
     assert clamp_phone_position(0.25) == 0.25
+
+
+def test_with_updates_returns_a_clamped_copy():
+    import pytest
+    original = Preferences()
+    changed = original.with_updates(cursor_size=999, phone_position=-2, mood='bogus', glow=True)
+    assert (changed.cursor_size, changed.phone_position, changed.mood, changed.glow) == (120, 0.0, 'listening', True)
+    assert original == Preferences()
+    with pytest.raises(TypeError):
+        original.with_updates(volume=3)
