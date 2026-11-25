@@ -189,3 +189,15 @@ def test_preferences_json_round_trip_and_bad_input():
     assert Preferences.from_json('[1, 2]') == Preferences()
     assert Preferences.from_json('{"cursor_size": "big", "glow": true}') == Preferences(glow=True)
     assert 'api_key' not in prefs.to_json()
+
+
+def test_next_mood_cycles_through_all_moods():
+    from bluey.settings import MOODS, next_mood
+    assert next_mood('listening') == 'resting'
+    assert next_mood(MOODS[-1]) == MOODS[0]
+    assert next_mood('???') == MOODS[0]
+    seen, mood = [], MOODS[0]
+    for _ in MOODS:
+        seen.append(mood)
+        mood = next_mood(mood)
+    assert seen == list(MOODS) and mood == MOODS[0]
