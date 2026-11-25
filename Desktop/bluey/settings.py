@@ -43,8 +43,8 @@ class Preferences:
                     result.phone_position=float(value)
                 elif type(value) is type(default) and (not isinstance(value,float) or math.isfinite(value)):
                     setattr(result, key, value)
-            result.cursor_size = max(48, min(120, result.cursor_size))
-            result.phone_position = max(0.0, min(1.0, result.phone_position))
+            result.cursor_size = clamp_cursor_size(result.cursor_size)
+            result.phone_position = clamp_phone_position(result.phone_position)
             if result.mood not in MOODS:
                 result.mood = "listening"
             result.personality = result.personality[:8000]
