@@ -75,6 +75,16 @@ class Preferences:
 MOODS = ("listening", "resting", "thinking", "talking", "pointing", "happy", "sleepy")
 
 
+def clamp_cursor_size(value: int) -> int:
+    """Cursor size is always kept between 48 and 120 pixels."""
+    return max(48, min(120, int(value)))
+
+
+def clamp_phone_position(value: float) -> float:
+    """Phone position is a fraction of the screen width, 0.0 to 1.0."""
+    return max(0.0, min(1.0, float(value)))
+
+
 def provider_for_key(key: str) -> str:
     """Which service a saved key belongs to. Groq keys start with `gsk_`."""
     return "groq" if key.strip().startswith("gsk_") else "openai"
