@@ -180,6 +180,11 @@ class Credentials:
     def get(self) -> str:
         return self._key
 
+    @property
+    def has_key(self) -> bool:
+        """True when a key is available for this session (saved or in memory)."""
+        return bool(self._key)
+
     def set(self, key: str) -> bool:
         key = key.strip()
         if not key or len(key) > 1024 or any(c.isspace() or ord(c)<33 or ord(c)>126 for c in key):
