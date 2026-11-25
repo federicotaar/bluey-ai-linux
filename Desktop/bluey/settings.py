@@ -72,6 +72,29 @@ class Preferences:
         mine, theirs = asdict(self), asdict(other)
         return {name: theirs[name] for name in mine if mine[name] != theirs[name]}
 
+    def to_json(self) -> str:
+        """Stable JSON for export; never contains credentials."""
+        return json.dumps(asdict(self), indent=2, sort_keys=True, allow_nan=False)
+
+    @classmethod
+    def from_json(cls, text: str) -> "Preferences":
+        """Parse exported preferences; bad or wrongly typed input falls back to defaults field by field."""
+        result = cls()
+        try:
+            raw = json.loads(text)
+        except (ValueError, TypeError):
+            return result
+        if not isinstance(raw, dict):
+            return result
+        good = {}
+        for key, default in asdict(result).items():
+            value = raw.get(key, default)
+            if key == "phone_position" and type(value) in (int, float) and math.isfinite(value):
+                good[key] = float(value)
+            elif type(value) is type(default) and (not isinstance(value, float) or math.isfinite(value)):
+                good[key] = value
+        return result.with_updates(**good)
+
     def save(self, path: Path | None = None) -> None:
         with _SAVE_LOCK:
             path = path or config_file()
