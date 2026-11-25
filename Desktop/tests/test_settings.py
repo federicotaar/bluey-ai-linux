@@ -201,3 +201,11 @@ def test_next_mood_cycles_through_all_moods():
         seen.append(mood)
         mood = next_mood(mood)
     assert seen == list(MOODS) and mood == MOODS[0]
+
+
+def test_mask_key_hides_short_keys_and_trims_long_ones():
+    from bluey.settings import mask_key
+    assert mask_key('') == ''
+    assert mask_key('sk-short') == '********'
+    assert mask_key('  sk-1234567890wxyz  ') == '****wxyz'
+    assert mask_key('sk-1234567890wxyz', visible=0) == '********'
