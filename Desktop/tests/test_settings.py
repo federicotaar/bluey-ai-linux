@@ -154,3 +154,13 @@ def test_credentials_reject_header_unsafe_bytes_without_replacing_session():
         with pytest.raises(ValueError):
             credentials.set(value)
         assert credentials.get() == "sk-existing"
+
+
+def test_clamp_helpers_hold_both_limits():
+    from bluey.settings import clamp_cursor_size, clamp_phone_position
+    assert clamp_cursor_size(10) == 48
+    assert clamp_cursor_size(500) == 120
+    assert clamp_cursor_size(72) == 72
+    assert clamp_phone_position(-1) == 0.0
+    assert clamp_phone_position(3) == 1.0
+    assert clamp_phone_position(0.25) == 0.25
