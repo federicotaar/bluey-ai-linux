@@ -180,3 +180,12 @@ def test_diff_lists_only_changed_fields():
     base = Preferences()
     assert base.diff(Preferences()) == {}
     assert base.diff(base.with_updates(glow=True, mood='happy')) == {'glow': True, 'mood': 'happy'}
+
+
+def test_preferences_json_round_trip_and_bad_input():
+    prefs = Preferences().with_updates(cursor_size=90, personality='Calm', glow=True)
+    assert Preferences.from_json(prefs.to_json()) == prefs
+    assert Preferences.from_json('not json') == Preferences()
+    assert Preferences.from_json('[1, 2]') == Preferences()
+    assert Preferences.from_json('{"cursor_size": "big", "glow": true}') == Preferences(glow=True)
+    assert 'api_key' not in prefs.to_json()
