@@ -218,3 +218,12 @@ def test_credentials_has_key_follows_set_and_clear():
     assert credentials.has_key is True
     credentials.clear()
     assert credentials.has_key is False
+
+
+def test_is_plausible_key_shapes():
+    from bluey.settings import is_plausible_key
+    assert is_plausible_key('gsk_' + 'a' * 40)
+    assert is_plausible_key('sk-' + 'b' * 40)
+    assert not is_plausible_key('sk-short')
+    assert not is_plausible_key('hello world ' * 4)
+    assert not is_plausible_key('')
