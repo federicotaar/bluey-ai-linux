@@ -140,6 +140,16 @@ def provider_for_key(key: str) -> str:
     return "groq" if key.strip().startswith("gsk_") else "openai"
 
 
+def mask_key(key: str, visible: int = 4) -> str:
+    """Safe display form of a key such as '****wxyz'. Short keys are fully hidden."""
+    key = key.strip()
+    if not key:
+        return ""
+    if visible < 1 or len(key) < visible + 6:
+        return "*" * 8
+    return "*" * 4 + key[-visible:]
+
+
 def config_file() -> Path:
     """Where the desktop settings live on this platform."""
     return user_config_path("BlueyDesktop", appauthor=False) / "settings.json"
