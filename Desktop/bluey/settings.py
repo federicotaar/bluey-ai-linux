@@ -128,6 +128,13 @@ def clamp_phone_position(value: float) -> float:
     return max(0.0, min(1.0, float(value)))
 
 
+def next_mood(current: str) -> str:
+    """The mood after `current` in MOODS order, wrapping around; unknown moods start at the first."""
+    if current not in MOODS:
+        return MOODS[0]
+    return MOODS[(MOODS.index(current) + 1) % len(MOODS)]
+
+
 def provider_for_key(key: str) -> str:
     """Which service a saved key belongs to. Groq keys start with `gsk_`."""
     return "groq" if key.strip().startswith("gsk_") else "openai"
