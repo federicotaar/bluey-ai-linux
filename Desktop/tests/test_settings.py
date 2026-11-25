@@ -209,3 +209,12 @@ def test_mask_key_hides_short_keys_and_trims_long_ones():
     assert mask_key('sk-short') == '********'
     assert mask_key('  sk-1234567890wxyz  ') == '****wxyz'
     assert mask_key('sk-1234567890wxyz', visible=0) == '********'
+
+
+def test_credentials_has_key_follows_set_and_clear():
+    credentials = Credentials(use_keyring=False)
+    assert credentials.has_key is False
+    credentials.set('sk-abcdef')
+    assert credentials.has_key is True
+    credentials.clear()
+    assert credentials.has_key is False
