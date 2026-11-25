@@ -128,6 +128,12 @@ def clamp_phone_position(value: float) -> float:
     return max(0.0, min(1.0, float(value)))
 
 
+def is_plausible_key(key: str) -> bool:
+    """Cheap sanity check before a key is saved: Groq `gsk_` or OpenAI `sk-` prefix and a sensible length."""
+    key = key.strip()
+    return key.startswith(("gsk_", "sk-")) and 20 <= len(key) <= 300 and key.isascii() and not any(c.isspace() for c in key)
+
+
 def next_mood(current: str) -> str:
     """The mood after `current` in MOODS order, wrapping around; unknown moods start at the first."""
     if current not in MOODS:
