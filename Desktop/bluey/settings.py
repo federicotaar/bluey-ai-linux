@@ -67,6 +67,11 @@ class Preferences:
         updated.personality = updated.personality[:8000]
         return updated
 
+    def diff(self, other: "Preferences") -> dict:
+        """Fields where `other` differs from this object, as {name: new value}."""
+        mine, theirs = asdict(self), asdict(other)
+        return {name: theirs[name] for name in mine if mine[name] != theirs[name]}
+
     def save(self, path: Path | None = None) -> None:
         with _SAVE_LOCK:
             path = path or config_file()
